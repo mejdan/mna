@@ -1,4 +1,5 @@
 import arg from 'arg';
+import { createProject } from './new';
 
 
 function parseArgumentsIntoOptions(rawArgs) {
@@ -8,7 +9,7 @@ function parseArgumentsIntoOptions(rawArgs) {
         '--git': Boolean,
         '--install': Boolean,
         '-n': '--name',
-        '-g': '--name',
+        '-g': '--git',
         '-y': '--yes',
         '-i': '--install',
       },
@@ -18,8 +19,8 @@ function parseArgumentsIntoOptions(rawArgs) {
     );
     return {
       git: args['--yes'] || false,
-      name: args['--name'],
-      template: args._[0],
+      name: args._[1] || args['--name'],
+      type: args._[0],
       runInstall: args['--install'] || false,
     };
    }
@@ -27,6 +28,18 @@ function parseArgumentsIntoOptions(rawArgs) {
    
 
    export function cli(args) {
+       // n||new 'The name of the new workspace and initial project.'
     let options = parseArgumentsIntoOptions(args);
-    console.log(options);
+
+    if(!options.type){
+        console.log('mna need argument ')
+        console.log('type mna -h for usage')
+    }else if(options.type !== 'new' && options.type !== 'generate' && options.type !== 'n' && options.type !== 'g' ){
+        console.log('invalid argument')
+        console.log(options);
+    }
+    else{
+        console.log(options);
+        createProject(options)
+    }
    }
